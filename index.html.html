@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Document Management Structure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #4a5568;
+        }
+        
+        .legend-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .folder-structure {
+            border-left: 3px solid #e2e8f0;
+            padding-left: 0;
+        }
+        
+        .folder-item {
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .folder-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+            gap: 10px;
+        }
+        
+        .folder-header:hover {
+            background: #e9ecef;
+            transform: translateX(4px);
+        }
+        
+        .folder-header.level-1 {
+            background: #4299e1;
+            color: white;
+            font-weight: 600;
+            border-left-color: #2c5282;
+        }
+        
+        .folder-header.level-1:hover {
+            background: #3182ce;
+        }
+        
+        .folder-header.level-2 {
+            background: #48bb78;
+            color: white;
+            font-weight: 500;
+            border-left-color: #2f855a;
+            margin-left: 30px;
+        }
+        
+        .folder-header.level-2:hover {
+            background: #38a169;
+        }
+        
+        .folder-header.level-3 {
+            background: #ed8936;
+            color: white;
+            font-weight: 500;
+            border-left-color: #c05621;
+            margin-left: 60px;
+        }
+        
+        .folder-header.level-3:hover {
+            background: #dd6b20;
+        }
+        
+        .folder-header.level-4 {
+            background: #9f7aea;
+            color: white;
+            font-weight: 500;
+            border-left-color: #6b46c1;
+            margin-left: 90px;
+        }
+        
+        .folder-header.level-4:hover {
+            background: #805ad5;
+        }
+        
+        .folder-header.section {
+            background: #ec4899;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            border-left-color: #be185d;
+            margin-bottom: 12px;
+        }
+        
+        .folder-header.section:hover {
+            background: #db2777;
+        }
+        
+        .folder-icon {
+            font-size: 18px;
+        }
+        
+        .folder-name {
+            flex: 1;
+        }
+        
+        .optional-badge {
+            background: rgba(255,255,255,0.3);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .expand-icon {
+            transition: transform 0.2s;
+            font-size: 12px;
+        }
+        
+        .expand-icon.expanded {
+            transform: rotate(90deg);
+        }
+        
+        .folder-content {
+            margin-left: 30px;
+            margin-top: 8px;
+            display: none;
+        }
+        
+        .folder-content.visible {
+            display: block;
+        }
+        
+        .document-list {
+            background: white;
+            border-left: 2px solid #e2e8f0;
+            padding-left: 20px;
+            margin-left: 40px;
+            margin-top: 8px;
+        }
+        
+        .document-item {
+            padding: 8px 12px;
+            margin: 4px 0;
+            background: #f7fafc;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .document-icon {
+            color: #718096;
+            font-size: 16px;
+        }
+        
+        .note {
+            background: #fef5e7;
+            border-left: 4px solid #f39c12;
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #795548;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📁 Corporate Document Management Structure</h1>
+        <p class="subtitle">Click on folders to expand/collapse levels • Organized by document pillars</p>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-box" style="background: #ec4899;"></div>
+                <span>Section (Top Level)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: #4299e1;"></div>
+                <span>Level 1 (Main Category)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: #48bb78;"></div>
+                <span>Level 2 (Subcategory)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: #ed8936;"></div>
+                <span>Level 3 (Sub-subcategory)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: #9f7aea;"></div>
+                <span>Level 4 (Deep nesting)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: #f7fafc; border: 2px solid #cbd5e0;"></div>
+                <span>📄 Documents</span>
+            </div>
+        </div>
+
+        <div class="note">
+            <strong>💡 Structure Overview:</strong> This structure has two main sections (pink): Documents and UBO. The Documents section contains all corporate documents organized hierarchically (folders 1-9). Some folders are marked as "optional" and may not exist for all entities.
+        </div>
+        
+        <div class="folder-structure">
+            
+            <!-- DOCUMENTS SECTION -->
+            <div class="folder-item">
+                <div class="folder-header section" onclick="toggleFolder(this)">
+                    <span class="folder-icon">📚</span>
+                    <span class="folder-name">DOCUMENTS</span>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="folder-content">
+            
+            <!-- 1. Incorporation and registration documents -->
+            <div class="folder-item">
+                <div class="folder-header level-1" onclick="toggleFolder(this)">
+                    <span class="folder-icon">📁</span>
+                    <span class="folder-name">1. Incorporation and Registration Documents</span>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="folder-content">
+                    <div class="document-list">
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Deed of incorporation</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Certificate of incorporation</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Certificate of registration</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Articles of Association -->
+            <div class="folder-item">
+                <div class="folder-header level-1" onclick="toggleFolder(this)">
+                    <span class="folder-icon">📁</span>
+                    <span class="folder-name">2. Articles of Association</span>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="folder-content">
+                    <div class="document-list">
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>AoA</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Statuto</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Articles of association</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>ByLaws</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Minutes & resolutions -->
+            <div class="folder-item">
+                <div class="folder-header level-1" onclick="toggleFolder(this)">
+                    <span class="folder-icon">📁</span>
+                    <span class="folder-name">3. Minutes & Resolutions</span>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="folder-content">
+                    
+                    <!-- Board of Directors -->
+                    <div class="folder-item">
+                        <div class="folder-header level-2" onclick="toggleFolder(this)">
+                            <span class="folder-icon">📁</span>
+                            <span class="folder-name">Board of Directors</span>
+                            <span class="expand-icon">▶</span>
+                        </div>
+                        <div class="folder-content">
+                            <div class="folder-item">
+                                <div class="folder-header level-3" onclick="toggleFolder(this)">
+                                    <span class="folder-icon">📁</span>
+                                    <span class="folder-name">Board Actions</span>
+                                    <span class="expand-icon">▶</span>
+                                </div>
+                                <div class="folder-content">
+                                    <div class="document-list">
+                                        <div class="document-item">
+                                            <span class="document-icon">📄</span>
+                                            <span>Action tracker</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="folder-item">
+                                <div class="folder-header level-3" onclick="toggleFolder(this)">
+                                    <span class="folder-icon">📁</span>
+                                    <span class="folder-name">Past Board Meetings</span>
+                                    <span class="expand-icon">▶</span>
+                                </div>
+                                <div class="folder-content">
+                                    <div class="document-list">
+                                        <div class="document-item">
+                                            <span class="document-icon">📄</span>
+                                            <span>BoD minutes</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="folder-item">
+                                <div class="folder-header level-3" onclick="toggleFolder(this)">
+                                    <span class="folder-icon">📁</span>
+                                    <span class="folder-name">Upcoming Board Meetings</span>
+                                    <span class="expand-icon">▶</span>
+                                </div>
+                            </div>
+                            
+                            <div class="folder-item">
+                                <div class="folder-header level-3" onclick="toggleFolder(this)">
+                                    <span class="folder-icon">📁</span>
+                                    <span class="folder-name">Pre-mammoth</span>
+                                    <span class="optional-badge">Optional</span>
+                                    <span class="expand-icon">▶</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- General Meeting -->
+                    <div class="folder-item">
+                        <div class="folder-header level-2" onclick="toggleFolder(this)">
+                            <span class="folder-icon">📁</span>
+                            <span class="folder-name">General Meeting</span>
+                            <span class="expand-icon">▶</span>
+                        </div>
+                        <div class="folder-content">
+                            <div class="folder-item">
+                                <div class="folder-header level-3" onclick="toggleFolder(this)">
+                                    <span class="folder-icon">📁</span>
+                                    <span class="folder-name">2021</span>
+                                    <span class="expand-icon">▶</span>
+                                </div>
+                                <div class="folder-content">
+                                    <div class="document-list">
+                                        <div class="document-item">
+                                            <span class="document-icon">📄</span>
+                                            <span>Minutes AGM</span>
+                                        </div>
+                                        <div class="document-item">
+                                            <span class="document-icon">📄</span>
+                                            <span>Minutes EGM</span>
+                                        </div>
+                                        <div class="document-item">
+                                            <span class="document-icon">📄</span>
+                                            <span>Minutes GSM</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="folder-item">
+                                <div class="folder-header level-3" onclick="toggleFolder(this)">
+                                    <span class="folder-icon">📁</span>
+                                    <span class="folder-name">2022</span>
+                                    <span class="expand-icon">▶</span>
+                                </div>
+                            </div>
+                            
+                            <div class="folder-item">
+                                <div class="folder-header level-3" onclick="toggleFolder(this)">
+                                    <span class="folder-icon">📁</span>
+                                    <span class="folder-name">2023</span>
+                                    <span class="expand-icon">▶</span>
+                                </div>
+                            </div>
+                            
+                            <div class="folder-item">
+                                <div class="folder-header level-3" onclick="toggleFolder(this)">
+                                    <span class="folder-icon">📁</span>
+                                    <span class="folder-name">etc.</span>
+                                    <span class="expand-icon">▶</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Committees -->
+                    <div class="folder-item">
+                        <div class="folder-header level-2" onclick="toggleFolder(this)">
+                            <span class="folder-icon">📁</span>
+                            <span class="folder-name">Committees</span>
+                            <span class="expand-icon">▶</span>
+                        </div>
+                        <div class="folder-content">
+                            <div class="folder-item">
+                                <div class="folder-header level-3" onclick="toggleFolder(this)">
+                                    <span class="folder-icon">📁</span>
+                                    <span class="folder-name">Audit & Risk Committee</span>
+                                    <span class="expand-icon">▶</span>
+                                </div>
+                                <div class="folder-content">
+                                    <div class="document-list">
+                                        <div class="document-item">
+                                            <span class="document-icon">📄</span>
+                                            <span>AuditCom Minutes</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="folder-item">
+                                <div class="folder-header level-3" onclick="toggleFolder(this)">
+                                    <span class="folder-icon">📁</span>
+                                    <span class="folder-name">Remuneration Committee</span>
+                                    <span class="expand-icon">▶</span>
+                                </div>
+                                <div class="folder-content">
+                                    <div class="document-list">
+                                        <div class="document-item">
+                                            <span class="document-icon">📄</span>
+                                            <span>RemCom minutes</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Governance Documentation -->
+                    <div class="folder-item">
+                        <div class="folder-header level-2" onclick="toggleFolder(this)">
+                            <span class="folder-icon">📁</span>
+                            <span class="folder-name">Governance Documentation</span>
+                            <span class="expand-icon">▶</span>
+                        </div>
+                        <div class="folder-content">
+                            <div class="document-list">
+                                <div class="document-item">
+                                    <span class="document-icon">📄</span>
+                                    <span>SHA (Shareholder Agreement)</span>
+                                </div>
+                                <div class="document-item">
+                                    <span class="document-icon">📄</span>
+                                    <span>Governance Charter</span>
+                                </div>
+                                <div class="document-item">
+                                    <span class="document-icon">📄</span>
+                                    <span>Rules of Procedure</span>
+                                </div>
+                                <div class="document-item">
+                                    <span class="document-icon">📄</span>
+                                    <span>Reserved Matters</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Older -->
+                    <div class="folder-item">
+                        <div class="folder-header level-2" onclick="toggleFolder(this)">
+                            <span class="folder-icon">📁</span>
+                            <span class="folder-name">Older</span>
+                            <span class="optional-badge">Optional</span>
+                            <span class="expand-icon">▶</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 4. Commercial & Enterprise Register -->
+            <div class="folder-item">
+                <div class="folder-header level-1" onclick="toggleFolder(this)">
+                    <span class="folder-icon">📁</span>
+                    <span class="folder-name">4. Commercial & Enterprise Register</span>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="folder-content">
+                    <div class="document-list">
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Commercial register extract</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Registry extract option</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>EXT - Execution copy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Transactions -->
+            <div class="folder-item">
+                <div class="folder-header level-1" onclick="toggleFolder(this)">
+                    <span class="folder-icon">📁</span>
+                    <span class="folder-name">5. Transactions</span>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="folder-content">
+                    <div class="document-list">
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Closing memorandum</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>QPA (Qualified Purchase Agreement)</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Resignation letter</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Escrow Agreement</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Keep well agreement</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Share purchase agreement</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Shareholder agreement</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Appointment of directors</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Asset purchase</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Closing binder</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Share Register -->
+            <div class="folder-item">
+                <div class="folder-header level-1" onclick="toggleFolder(this)">
+                    <span class="folder-icon">📁</span>
+                    <span class="folder-name">6. Share Register</span>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="folder-content">
+                    <div class="document-list">
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Ownership attestation</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>SHR Shareholder register</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Resolution met apostille</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>RBE Extract</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Share certificate</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>List of shareholders</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. Financial -->
+            <div class="folder-item">
+                <div class="folder-header level-1" onclick="toggleFolder(this)">
+                    <span class="folder-icon">📁</span>
+                    <span class="folder-name">7. Financial</span>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="folder-content">
+                    <div class="document-list">
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Annual Accounts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. Tax -->
+            <div class="folder-item">
+                <div class="folder-header level-1" onclick="toggleFolder(this)">
+                    <span class="folder-icon">📁</span>
+                    <span class="folder-name">8. Tax</span>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="folder-content">
+                    <div class="document-list">
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Letter of support</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Tax residency</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. IP -->
+            <div class="folder-item">
+                <div class="folder-header level-1" onclick="toggleFolder(this)">
+                    <span class="folder-icon">📁</span>
+                    <span class="folder-name">9. IP (Intellectual Property)</span>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="folder-content">
+                    <div class="document-list">
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Trademark certification</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>eSearch evidence</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>EUIPO documentation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                </div>
+            </div>
+            <!-- END DOCUMENTS SECTION -->
+
+            <!-- UBO SECTION -->
+            <div class="folder-item">
+                <div class="folder-header section" onclick="toggleFolder(this)">
+                    <span class="folder-icon">👤</span>
+                    <span class="folder-name">UBO (Ultimate Beneficial Owner)</span>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="folder-content">
+                    <div class="document-list">
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Excerpt from UBO Database</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>UBO Affidavit</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>WiEReG einfacher Auszug</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>Transparency register</span>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-icon">📄</span>
+                            <span>PSC letter</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END UBO SECTION -->
+
+        </div>
+    </div>
+
+    <script>
+        function toggleFolder(element) {
+            const content = element.nextElementSibling;
+            const icon = element.querySelector('.expand-icon');
+            
+            if (content && content.classList.contains('folder-content')) {
+                content.classList.toggle('visible');
+                icon.classList.toggle('expanded');
+            }
+        }
+
+        // Expand all Level 1 folders and Section headers by default
+        document.addEventListener('DOMContentLoaded', function() {
+            // Expand pink section headers
+            const sectionHeaders = document.querySelectorAll('.folder-header.section');
+            sectionHeaders.forEach(header => {
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('.expand-icon');
+                if (content) {
+                    content.classList.add('visible');
+                    icon.classList.add('expanded');
+                }
+            });
+            
+            // Expand Level 1 folders
+            const level1Headers = document.querySelectorAll('.folder-header.level-1');
+            level1Headers.forEach(header => {
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('.expand-icon');
+                if (content) {
+                    content.classList.add('visible');
+                    icon.classList.add('expanded');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
